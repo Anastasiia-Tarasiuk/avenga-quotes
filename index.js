@@ -127,7 +127,7 @@ function saveRating(e, id){
         return;
     } 
 
-    [...e.currentTarget.children].forEach(el => el.classList.add('rated'));
+    colorizeStars(e.target.parentElement, e.target.value);
 
     const ratedItem = JSON.parse(localStorage.getItem(id));
     ratedItem.value = e.target.value;
@@ -141,7 +141,7 @@ function saveRating(e, id){
                 changeRatedValue(e, id);
 
                 if (Number(id) === storageId) {
-                    colorStars(0, e.target.value);
+                    colorizeStars(document.querySelectorAll(".rating")[0], e.target.value);
                 }
             }
         } else {
@@ -149,7 +149,7 @@ function saveRating(e, id){
                 changeRatedValue(e, id);
             }
         }
-    }
+    } 
 
     if (quotesArray.length > 0) {
         quotesArray.forEach((el, idx) => {
@@ -272,7 +272,7 @@ function setModalContent(id) {
     modal.appendChild(modalQuote);
     modal.appendChild(modalRating);
 
-    colorStars(1, value);
+    colorizeStars(modalRating, value);
 }
 
 function changeRatedValue(e, id){
@@ -281,14 +281,14 @@ function changeRatedValue(e, id){
     setIcon(quoteRaitingToChange);
 }
 
-function colorStars(num, value) {
-    [...document.querySelectorAll(".rating")[num].children].forEach((el, idx) => {
+function colorizeStars(element, value) {
+    [...element.children].forEach(el => {
         el.classList.remove('rated');
-        if (idx % 2 === 0) {
+
+        if (el.tagName = "INPUT") { 
             if (el.getAttribute("value") <= value) {
                 el.classList.add('rated');
             }
-        }
-        
+        } 
     })
 }

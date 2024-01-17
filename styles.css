@@ -42,7 +42,7 @@ button {
 }
 
 .rating input {
-    display:none;
+    display: none;
 }
 
 .rating label {
@@ -56,11 +56,7 @@ button {
 
 .rated + label  {
     background-image:url(images/star-colored.png);
-}
-
-.rating input:checked ~ input + label {
-    background-image:url(images/star.png);
-}
+} 
 
 .modal-button {
     width: 40px;
