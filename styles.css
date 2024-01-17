@@ -1,0 +1,156 @@
+li {
+    list-style: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+.list {
+    padding: 0;
+    margin-top: 36px;
+    height: 248px;
+}
+
+.list li {
+    display: flex;
+    position: relative;
+}
+
+.list li:not(:last-child) {
+    margin-bottom: 12px;
+}
+
+.list p {
+   margin: 0;
+}
+
+.quote {
+    height: 48px;
+}
+
+.pages button {
+    border: 1px solid black;
+}
+
+.active {
+    background-color: #f4c901;
+}
+
+.rating {
+    margin-bottom: 12px;
+}
+
+.rating input {
+    display:none;
+}
+
+.rating label {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url(images/star.png);
+    background-size: 24px 24px;
+    cursor: pointer;
+}
+
+.rated + label  {
+    background-image:url(images/star-colored.png);
+}
+
+.rating input:checked ~ input + label {
+    background-image:url(images/star.png);
+}
+
+.modal-button {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.modal-button::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: 24px 24px;
+}
+
+.tooltip-container{
+    display: none;
+    position: absolute;
+    top: -35px;
+    left: 45px;
+    background-color: white;
+    -webkit-box-shadow: 8px 7px 15px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 8px 7px 15px -1px rgba(0,0,0,0.75);
+    box-shadow: 8px 7px 15px -1px rgba(0,0,0,0.75);
+}
+
+.modal-button:hover {
+    background-color: #f4c901;
+    border: 1px solid black;
+}
+
+.modal-button:hover + .tooltip-container {
+    display: block;
+}
+
+.one-star::before {
+    background-image: url("/images/poop.png");
+}
+
+.two-star::before {
+    background-image: url("/images/thumb.png");
+}
+
+.three-star::before {
+    background-image: url("/images/cloud.png");
+}
+
+.four-star::before {
+    background-image: url("/images/candy.png");
+}
+
+.five-star::before {
+    background-image: url("/images/crown.png");
+}
+
+.default::before {
+    background-image: url("/images/scale.png");
+}
+
+.modal {
+    width: 300px;
+    height: 150px;
+    background-color: #f4c901;
+    padding: 24px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.close-modal {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.is-hidden {
+    display: none;
+}
+
+.is-shown {
+    display: block;
+}
+
+.overlay {
+    background-color: rgba(158, 158, 158, 0.5);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
+    height: 100%;
+}
