@@ -15,9 +15,9 @@ pagesEl.addEventListener('click', paginate);
 closeModalButton.addEventListener('click', e => toggleModal(e));
 overlay.addEventListener('click',  e => toggleModal(e));
 
+const NUMBER = 5;
 let quotesArray = [];
 let numberOfPages = null;
-const NUMBER = 5;
 let isListShown = false;
 let currentPage = null;
 let storageId = null;
@@ -46,7 +46,7 @@ function getAPI(url){
         })
         .then(res => {
             quoteEl.textContent = res[0].q;
-            const rating = createRating();
+            const rating = createRating("quoteBlock");
             rating.addEventListener("click", (e) => saveRating(e, storageId));
             quoteEl.after(rating);
 
@@ -67,7 +67,6 @@ function seeAllQuotes(){
     if (listEl.innerHTML.length > 0) {
         listEl.innerHTML = "";
         pagesEl.innerHTML = "";
-        
     }
 
     const length = localStorage.length;
@@ -91,21 +90,15 @@ function seeAllQuotes(){
         for (let j = 0; j < numberOfPages; j++) {
             pagesEl.insertAdjacentHTML("beforeend", `<button id=${j} class=${j===0? "active" : ""}>${j+1}</button>`);
         } 
-
-        currentPage = 1;
     } else {
         listEl.innerHTML = `<li><p>No quotes yet</p></li>`;
     }
 }
 
 function paginate(e){
-    if (e.target.nodeName !== "BUTTON") {
+    if (e.target.nodeName !== "BUTTON" || currentPage === e.target.getAttribute('id')) {
         return;
     } 
-
-    if (currentPage === e.target.getAttribute('id')) {
-        return;
-    }
 
     currentPage = e.target.getAttribute('id');
     const quotesOfCurrentPage = quotesArray.slice(currentPage*NUMBER, currentPage*NUMBER+NUMBER);
@@ -123,6 +116,7 @@ function paginate(e){
 
 function saveRating(e, id){
     e.stopPropagation();
+
     if (e.target.nodeName !== "INPUT") {
         return;
     } 
@@ -134,7 +128,7 @@ function saveRating(e, id){
     localStorage.setItem(id, JSON.stringify(ratedItem));
 
     if (isListShown) {
-        if (isCurrentQuoteShown()) {
+        if (isCurrentQuoteShownInList()) {
             if (!e.target.parentElement.classList.contains("modal-rating")) {
                 changeRatedValue(e, storageId);
             } else {
@@ -214,7 +208,7 @@ function setIcon(el){
     }
 }
 
-function isCurrentQuoteShown() {
+function isCurrentQuoteShownInList() {
     const quotesIdOnPage = [...listEl.children].map(el => Number(el.querySelector("p").dataset.id));
     return quotesIdOnPage.includes(storageId) ? true : false;
 }
@@ -234,18 +228,18 @@ function toggleModal(e, id){
     }
 }
 
-function createRating({element = "quoteBlock"}={}){
+function createRating(elementName){
     const rating = document.createElement("div");
     rating.classList.add("rating"); 
 
     for (let i = 0; i < 5; i++) {
         const star =  document.createElement("input");
         star.setAttribute("type", "radio");
-        star.setAttribute("name", `star${element}`);
+        star.setAttribute("name", `star${elementName}`);
         star.setAttribute("value", `${i+1}`);
-        star.setAttribute("id", `star${i+1+element}`);
+        star.setAttribute("id", `star${i+1+elementName}`);
         const label =  document.createElement("label");
-        label.setAttribute("for", `star${i+1+element}`);
+        label.setAttribute("for", `star${i+1+elementName}`);
         rating.appendChild(star);
         rating.appendChild(label);
     }
@@ -254,7 +248,7 @@ function createRating({element = "quoteBlock"}={}){
 }
 
 function setModalContent(id) {
-    const value = JSON.parse(localStorage.getItem(id)).value;
+    const quoteFromStorage =  JSON.parse(localStorage.getItem(id));
 
     if (closeModalButton.nextElementSibling) {
         document.querySelector(".modal-rating").remove();
@@ -262,17 +256,16 @@ function setModalContent(id) {
     }
 
     const modalQuote = document.createElement("p");
-    modalQuote.innerHTML = JSON.parse(localStorage.getItem(id)).item;
-    modalQuote.classList.add("modal-quote");
+    modalQuote.innerHTML = quoteFromStorage.item;
     
-    const modalRating = createRating({element: "modalBlock"});
+    const modalRating = createRating("modalBlock");
+    modalRating.addEventListener("click", (e) => saveRating(e, id));
     modalRating.classList.add("modal-rating"); 
 
-    modalRating.addEventListener("click", (e) => saveRating(e, id));
     modal.appendChild(modalQuote);
     modal.appendChild(modalRating);
 
-    colorizeStars(modalRating, value);
+    colorizeStars(modalRating, quoteFromStorage.value);
 }
 
 function changeRatedValue(e, id){
